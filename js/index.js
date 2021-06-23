@@ -28,6 +28,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // quizArray QUESTIONS & ANSWERS
   // q = QUESTION, o = OPTIONS, a = CORRECT ANSWER
   // Basic ideas from https://code-boxx.com/simple-javascript-quiz/
+  
+  
   const quizArray = [
     {
       q: 'Which is the third planet from the sun?',
@@ -40,10 +42,22 @@ window.addEventListener('DOMContentLoaded', () => {
       a: 3,
     },
     {
-      q: 'What is the capital of Australia',
+      q: 'What is the capital of Australia?',
       o: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
       a: 1,
     },
+    {
+      q: 'What is the largest country in the world?',
+      o: ['Russia', 'Canada', 'Japan', 'Australia'],
+      a: 0,
+    },
+    {
+      q: 'which country has highest population growth rate?',
+      o: ['China', 'India', 'Nigeria', 'Syria'],
+      a: 3,
+    },
+
+    
   ];
 
   // function to Display the quiz questions and answers from the object
@@ -62,10 +76,11 @@ window.addEventListener('DOMContentLoaded', () => {
       quizWrap.innerHTML = quizDisplay;
     });
   };
-
+  
   // Calculate the score
+  let score = 0;
   const calculateScore = () => {
-    let score = 0;
+    
     quizArray.map((quizItem, index) => {
       for (let i = 0; i < 4; i++) {
         //highlight the li if it is the correct answer
@@ -73,18 +88,57 @@ window.addEventListener('DOMContentLoaded', () => {
         let r = `radio_${index}_${i}`;
         liElement = document.querySelector('#' + li);
         radioElement = document.querySelector('#' + r);
-
+        
         if (quizItem.a == i) {
           //change background color of li element here
+          liElement.style.backgroundColor = "#345698"
         }
 
         if (radioElement.checked) {
           // code for task 1 goes here
+          score++;
         }
       }
     });
+    return score;
   };
-
+  function displayScore(){
+    const scoreDiv = document.getElementById('score');
+    scoreDiv.innerHTML = `Score: ${score}`;
+  }
   // call the displayQuiz function
   displayQuiz();
+  // Event listener submit button
+ 
+  const submitButton = document.getElementById('btnSubmit');
+  submitButton.addEventListener ('click', () =>{
+  submitButton.style.display = "none";
+  calculateScore();
+  displayScore();
+  quizOver =1;
+  });
+ 
+
+// Event listener for reset button
+const resetButton = document.getElementById('btnReset'); 
+resetButton.addEventListener ('click', () =>{
+location.reload();
+});
+
+// Timer
+var sec = 15;
+var time = setInterval(myTimer, 1000);
+
+function myTimer() {
+    document.getElementById('time').innerHTML = sec + "sec left";
+    sec--;
+    if (sec == -1) {
+        clearInterval(time);
+        submitButton.click();
+        calculateScore();
+
+    }
+}
+
+
 });
